@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/19 10:00:49 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/18 13:51:00 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-/* Calculates the number of chars in current line and allocates memory
-accordingly. */
 void	ft_genline(char **line, t_list *stash)
 {
 	int	i;
@@ -38,7 +36,6 @@ void	ft_genline(char **line, t_list *stash)
 	*line = malloc(sizeof(char) * (len + 1));
 }
 
-/* Extracts all characters from stash and stores in out line. Stops after /n. */
 void	ft_getline(t_list *stash, char **line)
 {
 	int	i;
@@ -67,8 +64,6 @@ void	ft_getline(t_list *stash, char **line)
 	(*line)[j] = '\0';
 }
 
-/* Cleans the stash after getting the line. Removes characters already returned 
-by get_next_line and keeps the unreturned ones in static variable. */
 void	ft_clean_stash(t_list **stash)
 {
 	t_list	*last;
@@ -97,7 +92,6 @@ void	ft_clean_stash(t_list **stash)
 	*stash = clean;
 }
 
-// Frees the full stash.
 void	ft_free_stash(t_list *stash)
 {
 	t_list	*current;
@@ -113,8 +107,6 @@ void	ft_free_stash(t_list *stash)
 	}
 }
 
-/* Returns the next line of a file. Successive calls gets the next line
-until EOF*/
 char	*get_next_line(int fd)
 {
 	static t_list	*stash = NULL;
