@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/05/19 09:03:29 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/20 16:00:58 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
+/*void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+	size_t	i;
+	void	*s;
+	size_t	n;
+
+	n = (count * size);
+	ptr = malloc(count * size);
+	i = 0;
+	if (!ptr)
+		return (NULL);
+	while (i < n)
+	{
+		((unsigned char *)s)[i] = '\0';
+		i++;
+	}
+	return (s);
+}*/
 // Uses read to add characters to the stash.
 void	ft_read_stash(int fd, t_list **stash, int *readed_ptr)
 {
@@ -31,6 +50,7 @@ void	ft_read_stash(int fd, t_list **stash, int *readed_ptr)
 	while (!ft_found_newline(*stash) && *readed_ptr != 0)
 	{
 		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		//buf = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!buf)
 			return ;
 		*readed_ptr = (int)read(fd, buf, BUFFER_SIZE);
