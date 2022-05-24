@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/19 10:00:49 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/24 16:46:41 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_genline(char **line, t_list *stash)
 		}
 		stash = stash->next;
 	}
-	*line = malloc(sizeof(char) * (len + 1));
+	*line = ft_calloc(sizeof(char), (len + 1));
 }
 
 /* Extracts all characters from stash and stores in out line. Stops after /n. */
@@ -64,53 +64,67 @@ void	ft_getline(t_list *stash, char **line)
 		}
 		stash = stash->next;
 	}
-	(*line)[j] = '\0';
 }
 
 /* Cleans the stash after getting the line. Removes characters already returned 
 by get_next_line and keeps the unreturned ones in static variable. */
-void	ft_clean_stash(t_list **stash)
+t_list	*ft_clean_stash(t_list **stash)
 {
 	t_list	*last;
 	t_list	*clean;
 	int		i;
 	int		j;
 
-	clean = malloc(sizeof(t_list));
+	clean = ft_calloc(sizeof(t_list), 1);
 	if (!stash || !clean)
-		return ;
+		return (NULL);
 	clean->next = NULL;
-	last = ft_lst_get_last(*stash);
+	last = ft_lstlast(*stash);
 	i = 0;
+	j = 0;
+	while (last->content[j])
+		j++;
 	while (last->content[i] && last->content[i] != '\n')
 		i++;
-	if (last->content && last->content[i] == '\n')
+	if (last->content[i] == '\n')
 		i++;
-	clean->content = malloc(sizeof(char) * (ft_strlen(last->content) - i) + 1);
+	clean->content = ft_calloc(sizeof(char), (j - i) + 1);
 	if (!clean->content)
-		return ;
+		return (NULL);
 	j = 0;
 	while (last->content[i])
 		clean->content[j++] = last->content[i++];
-	clean->content[j] = '\0';
-	ft_free_stash(*stash);
-	*stash = clean;
+	return (clean);
 }
 
-// Frees the full stash.
-void	ft_free_stash(t_list *stash)
+// Adds the content of buffer to the end of stash.
+void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 {
-	t_list	*current;
-	t_list	*next;
+	int		i;
+	t_list	*last;
+	t_list	*new;
 
-	current = stash;
-	while (current)
+	new = ft_calloc(sizeof(t_list), 1);
+	if (!new)
+		return ;
+	new->next = NULL;
+	new->content = ft_calloc(sizeof(char), (reader + 1));
+	if (!new->content)
+		return ;
+	i = 0;
+	while (buf[i] && i < reader)
 	{
-		free(current->content);
-		next = current->next;
-		free(current);
-		current = next;
+		new->content[i] = buf[i];
+		i++;
 	}
+	new->content[i] = '\0';
+	if (*stash == NULL)
+	{
+		*stash = new;
+		return ;
+	}
+	last = ft_lstlast(*stash);
+	last->next = new;
 }
 
 /* Returns the next line of a file. Successive calls gets the next line
@@ -119,17 +133,20 @@ char	*get_next_line(int fd)
 {
 	static t_list	*stash = NULL;
 	char			*line;
-	int				readed;
+	int				reader;
+	t_list			*clean;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
-	readed = 1;
+	reader = 1;
 	line = NULL;
-	ft_read_stash(fd, &stash, &readed);
+	ft_read_stash(fd, &stash, &reader);
 	if (stash == NULL)
 		return (NULL);
 	ft_getline(stash, &line);
-	ft_clean_stash(&stash);
+	clean = ft_clean_stash(&stash);
+	ft_free_stash(stash);
+	stash = clean;
 	if (line[0] == '\0')
 	{
 		ft_free_stash(stash);
