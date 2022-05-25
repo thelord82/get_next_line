@@ -6,43 +6,53 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/05/18 13:50:34 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/25 14:57:12 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+void	*ft_calloc(size_t count, size_t size)
 {
 	size_t	i;
+	void	*s;
+	size_t	n;
 
+	n = (count * size);
+	s = malloc(count * size);
 	i = 0;
-	while (s[i])
+	if (!s)
+		return (NULL);
+	while (i < n)
+	{
+		((unsigned char *)s)[i] = '\0';
 		i++;
-	return (i);
+	}
+	return (s);
 }
 
-void	ft_read_stash(int fd, t_list **stash, int *readed_ptr)
+// Uses read to add characters to the stash.
+void	ft_read_stash(int fd, t_list **stash, int *reader_ptr)
 {
 	char	*buf;
 
-	while (!ft_found_newline(*stash) && *readed_ptr != 0)
+	while (!ft_found_newline(*stash) && *reader_ptr != 0)
 	{
-		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		buf = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!buf)
 			return ;
-		*readed_ptr = (int)read(fd, buf, BUFFER_SIZE);
-		if ((*stash == NULL && *readed_ptr == 0) || *readed_ptr == -1)
+		*reader_ptr = (int)read(fd, buf, BUFFER_SIZE);
+		if ((*stash == NULL && *reader_ptr == 0) || *reader_ptr == -1)
 		{
 			free (buf);
 			return ;
 		}
-		buf[*readed_ptr] = '\0';
-		ft_add_to_stash(stash, buf, *readed_ptr);
+		ft_add_to_stash(stash, buf, *reader_ptr);
 		free (buf);
 	}
 }
 
+// Looks for a /n character in the given list.
 int	ft_found_newline(t_list *stash)
 {
 	int		i;
@@ -50,7 +60,7 @@ int	ft_found_newline(t_list *stash)
 
 	if (stash == NULL)
 		return (0);
-	current = ft_lst_get_last(stash);
+	current = ft_lstlast(stash);
 	i = 0;
 	while (current->content[i])
 	{
@@ -61,41 +71,24 @@ int	ft_found_newline(t_list *stash)
 	return (0);
 }
 
-t_list	*ft_lst_get_last(t_list *stash)
+// Returns a pointer to the last node in stash.
+t_list	*ft_lstlast(t_list *stash)
 {
-	t_list	*current;
-
-	current = stash;
-	while (current && current->next)
-		current = current->next;
-	return (current);
+	while (stash && stash->next)
+		stash = stash->next;
+	return (stash);
 }
 
-void	ft_add_to_stash(t_list **stash, char *buf, int readed)
+// Frees the full stash.
+void	ft_free_stash(t_list *stash)
 {
-	int		i;
-	t_list	*last;
-	t_list	*new;
+	t_list	*next;
 
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return ;
-	new->next = NULL;
-	new->content = malloc(sizeof(char) * (readed + 1));
-	if (!new->content)
-		return ;
-	i = 0;
-	while (buf[i] && i < readed)
+	while (stash)
 	{
-		new->content[i] = buf[i];
-		i++;
+		free(stash->content);
+		next = stash->next;
+		free(stash);
+		stash = next;
 	}
-	new->content[i] = '\0';
-	if (*stash == NULL)
-	{
-		*stash = new;
-		return ;
-	}
-	last = ft_lst_get_last(*stash);
-	last->next = new;
 }

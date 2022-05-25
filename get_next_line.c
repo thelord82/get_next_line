@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/24 16:46:41 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/25 12:46:01 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 		new->content[i] = buf[i];
 		i++;
 	}
-	new->content[i] = '\0';
 	if (*stash == NULL)
 	{
 		*stash = new;
