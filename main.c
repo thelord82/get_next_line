@@ -6,11 +6,12 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:23:17 by malord            #+#    #+#             */
-/*   Updated: 2022/05/25 16:32:26 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/26 13:51:28 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+//#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	main(void)
 {
@@ -24,16 +25,28 @@ int	main(void)
 	fd[4] = open("test.txt", O_RDONLY);
 	fd[5] = open("test2", O_RDONLY);
 
-	/*while (1)
+	while (1)
 	{
 		line = get_next_line(fd[4]);
 		if (line == NULL)
 			break ;
 		printf("%s", line);
 		free (line);
-	}*/
-	printf("\n");
-	line = get_next_line(fd[0]);
+	}
+	//printf("\n");
+	/*line = get_next_line(fd[4]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[5]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[4]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[5]);
 	printf("%s", line);
 	free (line);
 
@@ -42,18 +55,6 @@ int	main(void)
 	free (line);
 
 	line = get_next_line(fd[0]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[4]);
-	printf("%s", line);
-	free (line);
-
-	/*line = get_next_line(fd[1]);
-	printf("%s", line);
-	free (line);*/
-
-	/*line = get_next_line(fd[0]);
 	printf("%s", line);
 	free (line);
 

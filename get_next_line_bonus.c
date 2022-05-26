@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/25 16:35:59 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/26 13:51:42 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_genline(char **line, t_list *stash)
 }
 
 /* Extracts all characters from stash and stores in out line. Stops after /n. */
-void	ft_getline(t_list *stash, char **line)
+/*void	ft_getline(t_list *stash, char **line)
 {
 	int	i;
 	int	j;
@@ -64,6 +64,33 @@ void	ft_getline(t_list *stash, char **line)
 		}
 		stash = stash->next;
 	}
+}*/
+int	ft_getline(t_list *stash, char **line)
+{
+	int	i;
+	int	j;
+
+	if (stash == NULL)
+		return (0);
+	ft_genline(line, stash);
+	if (!(*line))
+		return (0);
+	j = 0;
+	while (stash)
+	{
+		i = 0;
+		while (stash->content[i])
+		{
+			if (stash->content[i] == '\n')
+			{
+				(*line)[j++] = stash->content[i];
+				break ;
+			}
+			(*line)[j++] = stash->content[i++];
+		}
+		stash = stash->next;
+	}
+	return (i);
 }
 
 /* Cleans the stash after getting the line. Removes characters already returned 
