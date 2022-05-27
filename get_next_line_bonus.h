@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 10:47:26 by malord            #+#    #+#             */
-/*   Updated: 2022/05/26 11:45:20 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/27 10:11:08 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct s_list
 {
 	char			*content;
+	int				fds;
 	struct s_list	*next;
 }					t_list;
 
@@ -37,8 +38,7 @@ void	ft_add_to_stash(t_list **stash, char *buf, int readed);
 t_list	*ft_clean_stash(t_list **stash);
 void	ft_free_stash(t_list *stash);
 void	ft_genline(char **line, t_list *stash);
-//void	ft_getline(t_list *stash, char **line);
-int		ft_getline(t_list *stash, char **line);
+void	ft_getline(t_list *stash, char **line);
 void	ft_read_stash(int fd, t_list **stash, int *reader_ptr);
 void	*ft_calloc(size_t count, size_t size);
 

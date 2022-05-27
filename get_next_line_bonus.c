@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/26 13:51:42 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/27 16:14:16 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_genline(char **line, t_list *stash)
 }
 
 /* Extracts all characters from stash and stores in out line. Stops after /n. */
-/*void	ft_getline(t_list *stash, char **line)
+void	ft_getline(t_list *stash, char **line)
 {
 	int	i;
 	int	j;
@@ -64,33 +64,6 @@ void	ft_genline(char **line, t_list *stash)
 		}
 		stash = stash->next;
 	}
-}*/
-int	ft_getline(t_list *stash, char **line)
-{
-	int	i;
-	int	j;
-
-	if (stash == NULL)
-		return (0);
-	ft_genline(line, stash);
-	if (!(*line))
-		return (0);
-	j = 0;
-	while (stash)
-	{
-		i = 0;
-		while (stash->content[i])
-		{
-			if (stash->content[i] == '\n')
-			{
-				(*line)[j++] = stash->content[i];
-				break ;
-			}
-			(*line)[j++] = stash->content[i++];
-		}
-		stash = stash->next;
-	}
-	return (i);
 }
 
 /* Cleans the stash after getting the line. Removes characters already returned 
@@ -153,6 +126,22 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 	last->next = new;
 }
 
+//Checks if fd is already in the opened fds list, if not, adds it. 
+int	ft_check_fd(int fd, t_list *files)
+{
+	t_list	*new;
+
+	new = malloc(sizeof(t_list));
+	while (files)
+	{
+		if (fd == files->fds)
+			return (1);
+		files = files->next;
+	}
+	new->fds = fd;
+	return (0);
+}
+
 /* Returns the next line of a file. Successive calls gets the next line
 until EOF*/
 char	*get_next_line(int fd)
@@ -161,9 +150,11 @@ char	*get_next_line(int fd)
 	char			*line;
 	int				reader;
 	t_list			*clean;
+	t_list			*fds;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
+	ft_check_fd(fd, fds);
 	reader = 1;
 	line = NULL;
 	ft_read_stash(fd, &stash, &reader);
