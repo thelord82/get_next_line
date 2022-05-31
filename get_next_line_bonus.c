@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/27 16:14:16 by malord           ###   ########.fr       */
+/*   Updated: 2022/05/30 08:54:33 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,14 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 //Checks if fd is already in the opened fds list, if not, adds it. 
 int	ft_check_fd(int fd, t_list *files)
 {
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
+	files = malloc(sizeof(t_list));
 	while (files)
 	{
 		if (fd == files->fds)
 			return (1);
 		files = files->next;
 	}
-	new->fds = fd;
+	files->fds = fd;
 	return (0);
 }
 
