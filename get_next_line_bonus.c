@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/03 11:28:40 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/03 12:21:04 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ char	*get_next_line(int fd)
 	int				reader;
 	t_list			*cleanbuf;
 	t_list			*fds;
-	char			test[BUFFER_SIZE];
+	char			test[10][BUFFER_SIZE];
 	int				i = 0;
 	char			*str = "TROU ";
 	char			*str2 = "DE PET";
@@ -235,12 +235,13 @@ char	*get_next_line(int fd)
 	cleanbuf = ft_clean_stash(&stash);
 	while (cleanbuf->content[i])
 	{
-		test[i] = cleanbuf->content[i];
+		test[fd][i] = cleanbuf->content[i];
 		i++;
 	}
+	test[fd][i] = '\0';
 	//printf("Buffer restant est : %c%c%c\n", test[0], test[1], test[2]);
 	ft_free_stash(stash);
-	stash = cleanbuf;
+	stash = NULL;
 	if (line[0] == '\0')
 	{
 		ft_free_stash(stash);
@@ -248,7 +249,8 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
-	//line = ft_strjoin(&test[0], line);
-	//printf("ICI : %s\n", ft_strjoin(&test[0], line));
+	line = ft_strjoin(&test[fd][0], line);
+	printf("ICI : %s\n", line);
+	//printf("ICI : %s\n", &test[fd][0]);
 	return (line);
 }
