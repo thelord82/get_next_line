@@ -6,41 +6,31 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:23:17 by malord            #+#    #+#             */
-/*   Updated: 2022/05/31 14:53:42 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/02 10:59:32 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "get_next_line.h"
 #include "get_next_line_bonus.h"
 
-t_list	*ft_lstlast(t_list *stash)
-{
-	while (stash && stash->next)
-		stash = stash->next;
-	return (stash);
-}
-
-int	ft_check_fd(int fd, t_list *files)
+/*int	ft_check_fd(int fd, t_list **files)
 {
 	t_list	*new;
-	t_list	*last;
+	t_list	*current;
 
-	while (files)
+	current = (*files);
+	while (current != NULL)
 	{
-		if (fd == files->fds)
+		if (fd == current->fds)
 			return (1);
-		files = files->next;
+		current = current->next;
 	}
 	new = malloc(sizeof(t_list));
 	new->fds = fd;
-	new->next = NULL;
-	files = malloc(sizeof(t_list));
-	files->fds = new->fds;
-	printf("%d\n", files->fds);
-	last = ft_lstlast(files);
-	last->next = new;
+	new->next = (*files);
+	(*files) = new;
 	return (0);
-}
+}*/
 int	main(void)
 {
 	int		*fd;
@@ -57,10 +47,10 @@ int	main(void)
 	fd[4] = open("test.txt", O_RDONLY);
 	fd[5] = open("test2", O_RDONLY);
 	i = 0;
-	list = malloc(sizeof(t_list));
-	head = list;
-	list->fds = fd[i++];
-	printf("Element inséré : %d\n", list->fds);
+	//list = malloc(sizeof(t_list));
+	//head = list;
+	//list->fds = fd[0];
+	/*printf("Element inséré : %d\n", list->fds);
 	while (i < 6)
 	{
 		new = malloc(sizeof(t_list));
@@ -74,7 +64,7 @@ int	main(void)
 	{
 		printf("Element de la liste : %d\n", list->fds);
 		list = list->next;
-	}
+	}*/
 	
 	//new->fds = fd[0];
 	//new->next = NULL;
@@ -84,13 +74,24 @@ int	main(void)
 		printf("Element de la liste : %d\n", tmp->fds);
 	}*/
 	//new->fds = fd[0];
-	/*new->next = NULL;
-	list = new;
-	printf("FD dans la liste? %d\n", ft_check_fd(fd[0], list));
-	printf("FD dans la liste? %d\n", ft_check_fd(fd[0], list));
-	printf("FD dans la liste? %d\n", ft_check_fd(fd[1], list));
-	printf("FD dans la liste? %d\n", ft_check_fd(fd[1], list));
-	printf("Valeur du FD : %d\n", fd[0]);*/
+	//new->next = NULL;
+	//list = new;
+	//list = malloc(sizeof(t_list));
+	/*printf("FD dans la liste? %d\n", ft_check_fd(fd[0], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[2], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[0], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[1], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[1], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[2], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[3], &head));
+	printf("FD dans la liste? %d\n", ft_check_fd(fd[3], &head));
+
+	printf("Elements de la liste : ");
+	for (t_list *tmp = head; tmp != NULL; tmp = tmp->next)
+	{
+		printf("%d ", tmp->fds);
+	}*/
+	//printf("Valeur du FD : %d\n", fd[0]);
 
 	//free(new);
 	/*while (1)
@@ -101,23 +102,23 @@ int	main(void)
 		printf("%s", line);
 		free (line);
 	}*/
+	line = get_next_line(fd[0]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[1]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[0]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[1]);
+	printf("%s", line);
+	free (line);
+
 	/*line = get_next_line(fd[4]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[5]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[4]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[5]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[4]);
 	printf("%s", line);
 	free (line);
 

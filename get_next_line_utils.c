@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/05/24 15:39:06 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/01 16:52:00 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_read_stash(int fd, t_list **stash, int *reader_ptr)
 {
 	char	*buf;
 
-	while (!ft_found_newline(*stash) && *reader_ptr != 0)
+	while (ft_found_newline(*stash) == 0 && *reader_ptr != 0)
 	{
 		buf = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 		if (!buf)

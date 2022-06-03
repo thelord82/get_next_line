@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/05/30 08:54:33 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/03 11:28:40 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_genline(char **line, t_list *stash)
 		}
 		stash = stash->next;
 	}
-	*line = ft_calloc(sizeof(char), (len + 1));
+	*line = malloc(sizeof(char) * (len + 1));
 }
 
 /* Extracts all characters from stash and stores in out line. Stops after /n. */
@@ -64,6 +64,7 @@ void	ft_getline(t_list *stash, char **line)
 		}
 		stash = stash->next;
 	}
+	(*line)[j] = '\0';
 }
 
 /* Cleans the stash after getting the line. Removes characters already returned 
@@ -75,7 +76,7 @@ t_list	*ft_clean_stash(t_list **stash)
 	int		i;
 	int		j;
 
-	clean = ft_calloc(sizeof(t_list), 1);
+	clean = malloc(sizeof(t_list));
 	if (!stash || !clean)
 		return (NULL);
 	clean->next = NULL;
@@ -88,12 +89,14 @@ t_list	*ft_clean_stash(t_list **stash)
 		i++;
 	if (last->content[i] == '\n')
 		i++;
-	clean->content = ft_calloc(sizeof(char), (j - i) + 1);
+	clean->content = malloc(sizeof(char) * ((j - i) + 1));
 	if (!clean->content)
 		return (NULL);
 	j = 0;
 	while (last->content[i])
 		clean->content[j++] = last->content[i++];
+	clean->content[j] = last->content[i];
+	clean->content[j] = '\0';
 	return (clean);
 }
 
@@ -104,19 +107,21 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 	t_list	*last;
 	t_list	*new;
 
-	new = ft_calloc(sizeof(t_list), 1);
+	new = malloc(sizeof(t_list));
 	if (!new)
 		return ;
 	new->next = NULL;
-	new->content = ft_calloc(sizeof(char), (reader + 1));
+	new->content = malloc(sizeof(char) * (reader + 1));
 	if (!new->content)
 		return ;
 	i = 0;
 	while (buf[i] && i < reader)
+	//while (buf[i] && i < reader && buf[i - 1] != '\n')
 	{
 		new->content[i] = buf[i];
 		i++;
 	}
+	new->content[i] = '\0';
 	if (*stash == NULL)
 	{
 		*stash = new;
@@ -126,18 +131,83 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 	last->next = new;
 }
 
-//Checks if fd is already in the opened fds list, if not, adds it. 
-int	ft_check_fd(int fd, t_list *files)
+// Returns the length of the string in parameter
+size_t	ft_strlen(const char *s)
 {
-	files = malloc(sizeof(t_list));
-	while (files)
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+// Copy string src into string dst. Returns length of src it tried to copy
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	c;
+
+	i = 0;
+	c = 0;
+	while (src[c] != '\0')
+		c++;
+	if (size != 0)
 	{
-		if (fd == files->fds)
-			return (1);
-		files = files->next;
+		while (src[i] != '\0' && i < size - 1)
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = '\0';
 	}
-	files->fds = fd;
-	return (0);
+	return (c);
+}
+
+/* Concatenate src string in dst string, returns the total length
+	of the string it tried to create */
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	j;
+	size_t	dst_len;
+	size_t	src_len;
+
+	src_len = ft_strlen(src);
+	dst_len = ft_strlen(dst);
+	j = dst_len;
+	i = 0;
+	if (dst_len < size - 1 && size > 0)
+	{
+		while (src[i] && dst_len + i < size - 1)
+		{
+			dst[j] = src[i];
+			j++;
+			i++;
+		}
+		dst[j] = 0;
+	}
+	if (dst_len >= size)
+		dst_len = size;
+	return (dst_len + src_len);
+}
+
+/* Allocates memory for the combination of s1 and s2, then returns pointer
+	to the new string containing the two*/
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*nstr;
+	size_t	len;
+
+	if (!s1 || !s2)
+		return (NULL);
+	nstr = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!nstr)
+		return (NULL);
+	len = (ft_strlen(s1) + ft_strlen(s2) + 1);
+	ft_strlcpy(nstr, s1, len);
+	ft_strlcat(nstr, s2, len);
+	return (nstr);
 }
 
 /* Returns the next line of a file. Successive calls gets the next line
@@ -147,21 +217,30 @@ char	*get_next_line(int fd)
 	static t_list	*stash = NULL;
 	char			*line;
 	int				reader;
-	t_list			*clean;
+	t_list			*cleanbuf;
 	t_list			*fds;
+	char			test[BUFFER_SIZE];
+	int				i = 0;
+	char			*str = "TROU ";
+	char			*str2 = "DE PET";
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
-	ft_check_fd(fd, fds);
 	reader = 1;
 	line = NULL;
 	ft_read_stash(fd, &stash, &reader);
 	if (stash == NULL)
 		return (NULL);
 	ft_getline(stash, &line);
-	clean = ft_clean_stash(&stash);
+	cleanbuf = ft_clean_stash(&stash);
+	while (cleanbuf->content[i])
+	{
+		test[i] = cleanbuf->content[i];
+		i++;
+	}
+	//printf("Buffer restant est : %c%c%c\n", test[0], test[1], test[2]);
 	ft_free_stash(stash);
-	stash = clean;
+	stash = cleanbuf;
 	if (line[0] == '\0')
 	{
 		ft_free_stash(stash);
@@ -169,5 +248,7 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
+	//line = ft_strjoin(&test[0], line);
+	//printf("ICI : %s\n", ft_strjoin(&test[0], line));
 	return (line);
 }

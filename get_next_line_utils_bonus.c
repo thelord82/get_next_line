@@ -6,29 +6,30 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/05/25 14:57:12 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/02 10:22:41 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-void	*ft_calloc(size_t count, size_t size)
+//Checks if fd is already in the opened fds list, if not, adds it. 
+int	ft_check_fd(int fd, t_list **files)
 {
-	size_t	i;
-	void	*s;
-	size_t	n;
+	t_list	*new;
+	t_list	*current;
 
-	n = (count * size);
-	s = malloc(count * size);
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (i < n)
+	current = (*files);
+	while (current != NULL)
 	{
-		((unsigned char *)s)[i] = '\0';
-		i++;
+		if (fd == current->fds)
+			return (1);
+		current = current->next;
 	}
-	return (s);
+	new = malloc(sizeof(t_list));
+	new->fds = fd;
+	new->next = (*files);
+	(*files) = new;
+	return (0);
 }
 
 // Uses read to add characters to the stash.
@@ -36,9 +37,9 @@ void	ft_read_stash(int fd, t_list **stash, int *reader_ptr)
 {
 	char	*buf;
 
-	while (!ft_found_newline(*stash) && *reader_ptr != 0)
+	while (ft_found_newline(*stash) == 0 && *reader_ptr != 0)
 	{
-		buf = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
+		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buf)
 			return ;
 		*reader_ptr = (int)read(fd, buf, BUFFER_SIZE);
@@ -47,6 +48,7 @@ void	ft_read_stash(int fd, t_list **stash, int *reader_ptr)
 			free (buf);
 			return ;
 		}
+		buf[*reader_ptr] = '\0';
 		ft_add_to_stash(stash, buf, *reader_ptr);
 		free (buf);
 	}
