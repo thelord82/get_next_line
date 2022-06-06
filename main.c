@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:23:17 by malord            #+#    #+#             */
-/*   Updated: 2022/06/02 10:59:32 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 16:07:46 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ int	main(void)
 	fd[4] = open("test.txt", O_RDONLY);
 	fd[5] = open("test2", O_RDONLY);
 	i = 0;
-	//list = malloc(sizeof(t_list));
-	//head = list;
-	//list->fds = fd[0];
+	list = malloc(sizeof(t_list));
+	head = list;
+	list->fds = fd[0];
 	/*printf("Element inséré : %d\n", list->fds);
 	while (i < 6)
 	{
@@ -101,12 +101,12 @@ int	main(void)
 			break ;
 		printf("%s", line);
 		free (line);
-	}*/
+	}*/	
 	line = get_next_line(fd[0]);
 	printf("%s", line);
 	free (line);
 
-	line = get_next_line(fd[1]);
+	line = get_next_line(fd[3]);
 	printf("%s", line);
 	free (line);
 
@@ -114,9 +114,18 @@ int	main(void)
 	printf("%s", line);
 	free (line);
 
-	line = get_next_line(fd[1]);
+	line = get_next_line(fd[3]);
 	printf("%s", line);
 	free (line);
+
+	line = get_next_line(fd[3]);
+	printf("%s", line);
+	free (line);
+
+	/*printf("%d\n", ft_check_fd(fd[0], &head));
+	printf("%d\n", ft_check_fd(fd[1], &head));
+	printf("%d\n", ft_check_fd(fd[2], &head));
+	printf("%d\n", ft_check_fd(fd[2], &head));*/
 
 	/*line = get_next_line(fd[4]);
 	printf("%s", line);

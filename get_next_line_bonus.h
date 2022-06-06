@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 10:47:26 by malord            #+#    #+#             */
-/*   Updated: 2022/06/01 14:46:31 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 11:44:09 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 #  define BUFFER_SIZE 5
 # endif
 
+# ifndef MAX_FD
+#  define MAX_FD 1024
+# endif
+
 typedef struct s_list
 {
 	char			*content;
@@ -35,7 +39,7 @@ int		ft_found_newline(t_list *stash);
 size_t	ft_strlen(const char *s);
 t_list	*ft_lstlast(t_list *stash);
 void	ft_add_to_stash(t_list **stash, char *buf, int readed);
-t_list	*ft_clean_stash(t_list **stash);
+char	*ft_clean_stash(t_list **stash);
 void	ft_free_stash(t_list *stash);
 void	ft_genline(char **line, t_list *stash);
 void	ft_getline(t_list *stash, char **line);

@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/03 12:21:04 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 16:22:44 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,15 @@ void	ft_getline(t_list *stash, char **line)
 
 /* Cleans the stash after getting the line. Removes characters already returned 
 by get_next_line and keeps the unreturned ones in static variable. */
-t_list	*ft_clean_stash(t_list **stash)
+char	*ft_clean_stash(t_list **stash)
 {
 	t_list	*last;
-	t_list	*clean;
+	char	*clean;
 	int		i;
 	int		j;
 
-	clean = malloc(sizeof(t_list));
-	if (!stash || !clean)
+	if (!stash)
 		return (NULL);
-	clean->next = NULL;
 	last = ft_lstlast(*stash);
 	i = 0;
 	j = 0;
@@ -89,14 +87,13 @@ t_list	*ft_clean_stash(t_list **stash)
 		i++;
 	if (last->content[i] == '\n')
 		i++;
-	clean->content = malloc(sizeof(char) * ((j - i) + 1));
-	if (!clean->content)
+	clean = malloc(sizeof(char) * ((j - i) + 1));
+	if (!clean)
 		return (NULL);
 	j = 0;
 	while (last->content[i])
-		clean->content[j++] = last->content[i++];
-	clean->content[j] = last->content[i];
-	clean->content[j] = '\0';
+		clean[j++] = last->content[i++];
+	clean[j] = '\0';
 	return (clean);
 }
 
@@ -116,7 +113,6 @@ void	ft_add_to_stash(t_list **stash, char *buf, int reader)
 		return ;
 	i = 0;
 	while (buf[i] && i < reader)
-	//while (buf[i] && i < reader && buf[i - 1] != '\n')
 	{
 		new->content[i] = buf[i];
 		i++;
@@ -217,12 +213,7 @@ char	*get_next_line(int fd)
 	static t_list	*stash = NULL;
 	char			*line;
 	int				reader;
-	t_list			*cleanbuf;
-	t_list			*fds;
-	char			test[10][BUFFER_SIZE];
-	int				i = 0;
-	char			*str = "TROU ";
-	char			*str2 = "DE PET";
+	char			cleanbuf[MAX_FD][BUFFER_SIZE];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
@@ -232,25 +223,16 @@ char	*get_next_line(int fd)
 	if (stash == NULL)
 		return (NULL);
 	ft_getline(stash, &line);
-	cleanbuf = ft_clean_stash(&stash);
-	while (cleanbuf->content[i])
-	{
-		test[fd][i] = cleanbuf->content[i];
-		i++;
-	}
-	test[fd][i] = '\0';
-	//printf("Buffer restant est : %c%c%c\n", test[0], test[1], test[2]);
+	if (cleanbuf[fd] != NULL)
+		line = ft_strjoin(cleanbuf[fd], line);
+	ft_strlcpy(cleanbuf[fd], ft_clean_stash(&stash), BUFFER_SIZE);
 	ft_free_stash(stash);
 	stash = NULL;
 	if (line[0] == '\0')
 	{
 		ft_free_stash(stash);
-		stash = NULL;
 		free(line);
 		return (NULL);
 	}
-	line = ft_strjoin(&test[fd][0], line);
-	printf("ICI : %s\n", line);
-	//printf("ICI : %s\n", &test[fd][0]);
 	return (line);
 }

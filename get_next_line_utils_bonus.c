@@ -6,31 +6,11 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/06/02 10:22:41 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 16:14:56 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
-//Checks if fd is already in the opened fds list, if not, adds it. 
-int	ft_check_fd(int fd, t_list **files)
-{
-	t_list	*new;
-	t_list	*current;
-
-	current = (*files);
-	while (current != NULL)
-	{
-		if (fd == current->fds)
-			return (1);
-		current = current->next;
-	}
-	new = malloc(sizeof(t_list));
-	new->fds = fd;
-	new->next = (*files);
-	(*files) = new;
-	return (0);
-}
 
 // Uses read to add characters to the stash.
 void	ft_read_stash(int fd, t_list **stash, int *reader_ptr)
@@ -93,4 +73,5 @@ void	ft_free_stash(t_list *stash)
 		free(stash);
 		stash = next;
 	}
+	stash = NULL;
 }
