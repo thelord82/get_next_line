@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:23:17 by malord            #+#    #+#             */
-/*   Updated: 2022/06/06 16:07:46 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 21:16:03 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@
 }*/
 int	main(void)
 {
-	int		*fd;
+	int		fd;
+	int		fd2;
+	int		fd3;
 	char	*line;
 	int		i;
 	t_list	*new;
 	t_list	*list;
 	t_list	*head;
 
-	fd[0] = open("1", O_RDONLY);
-	fd[1] = open("2", O_RDONLY);
-	fd[2] = open("3", O_RDONLY);
-	fd[3] = open("4", O_RDONLY);
+	
+	fd = open("1", O_RDONLY);
+	fd2 = open("2", O_RDONLY);
+	fd3 = open("3", O_RDONLY);
+	/*fd[3] = open("4", O_RDONLY);
 	fd[4] = open("test.txt", O_RDONLY);
-	fd[5] = open("test2", O_RDONLY);
+	fd[5] = open("test2", O_RDONLY);*/
 	i = 0;
-	list = malloc(sizeof(t_list));
-	head = list;
-	list->fds = fd[0];
 	/*printf("Element inséré : %d\n", list->fds);
 	while (i < 6)
 	{
@@ -102,25 +102,49 @@ int	main(void)
 		printf("%s", line);
 		free (line);
 	}*/	
-	line = get_next_line(fd[0]);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd3);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd3);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd3);
+	printf("%s", line);
+	free (line);
+
+	/*line = get_next_line(fd[3]);
 	printf("%s", line);
 	free (line);
 
 	line = get_next_line(fd[3]);
 	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[0]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[3]);
-	printf("%s", line);
-	free (line);
-
-	line = get_next_line(fd[3]);
-	printf("%s", line);
-	free (line);
+	free (line);*/
 
 	/*printf("%d\n", ft_check_fd(fd[0], &head));
 	printf("%d\n", ft_check_fd(fd[1], &head));

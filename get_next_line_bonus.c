@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/06 16:22:44 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/06 21:08:40 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ char	*get_next_line(int fd)
 	static t_list	*stash = NULL;
 	char			*line;
 	int				reader;
-	char			cleanbuf[MAX_FD][BUFFER_SIZE];
+	char			cleanbuf[290][BUFFER_SIZE];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 		return (NULL);
