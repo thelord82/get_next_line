@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/06/06 16:14:56 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/08 12:01:38 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,29 @@ int	ft_found_newline(t_list *stash)
 		i++;
 	}
 	return (0);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*nstr;
+	size_t	len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	while (s1[len])
+		len++;
+	while (s2[i++])
+		len++;
+	nstr = malloc((sizeof(char) * len) + 1);
+	if (!nstr)
+		return (NULL);
+	while (*s1)
+		*nstr++ = *s1++;
+	while (*s2)
+		*nstr++ = *s2++;
+	*nstr++ = '\0';
+	return (nstr - (len + 1));
 }
 
 // Returns a pointer to the last node in stash.
