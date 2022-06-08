@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:23:17 by malord            #+#    #+#             */
-/*   Updated: 2022/06/08 13:01:16 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/08 13:03:54 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,30 @@ int	main(void)
 	line = get_next_line(fd2);
 	printf("%s", line);
 	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd3);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd2);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd3);
+	printf("%s", line);
+	free (line);
+
+	/*line = get_next_line(fd[3]);
+	printf("%s", line);
+	free (line);
+
+	line = get_next_line(fd[3]);
+	printf("%s", line);
+	free (line);*/
 
 	/*printf("%d\n", ft_check_fd(fd[0], &head));
 	printf("%d\n", ft_check_fd(fd[1], &head));
