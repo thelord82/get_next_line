@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 10:47:26 by malord            #+#    #+#             */
-/*   Updated: 2022/06/08 11:37:19 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/08 15:36:26 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ size_t	ft_strlen(const char *s);
 t_list	*ft_lstlast(t_list *stash);
 void	ft_add_to_stash(t_list **stash, char *buf, int readed);
 void	ft_clean_stash(t_list **stash, char (*bufleft)[BUFFER_SIZE + 1]);
-void	ft_free_stash(t_list *stash);
+void	ft_free_stash(t_list *stash, char (*cleanbuf)[BUFFER_SIZE + 1]);
 void	ft_genline(char **line, t_list *stash);
 void	ft_getline(t_list *stash, char **line);
 void	ft_read_stash(int fd, t_list **stash, int *reader_ptr);

@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/08 13:05:31 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/08 16:43:12 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,24 +130,26 @@ char	*get_next_line(int fd)
 	char			*line;
 	int				reader;
 	static char		cleanbuf[OPEN_MAX][BUFFER_SIZE + 1];
+	char			*tmp;
 
 	stash = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &tmp, 0) < 0)
 		return (NULL);
 	reader = 1;
-	line = NULL;
+	tmp = NULL;
 	ft_read_stash(fd, &stash, &reader);
 	if (stash == NULL)
 		return (NULL);
-	ft_getline(stash, &line);
-	line = ft_strjoin(cleanbuf[fd], line);
+	ft_getline(stash, &tmp);
+	line = ft_strjoin(cleanbuf[fd], tmp);
 	ft_clean_stash(&stash, &cleanbuf[fd]);
-	ft_free_stash(stash);
-	if (line[0] == '\0')
+	ft_free_stash(stash, &cleanbuf[fd]);
+	if (tmp[0] == '\0')
 	{
-		ft_free_stash(stash);
-		free(line);
+		ft_free_stash(stash, &cleanbuf[fd]);
+		//free(line);
 		return (NULL);
 	}
+	free(tmp);
 	return (line);
 }

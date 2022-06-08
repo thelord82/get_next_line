@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/06/08 12:01:38 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/08 16:58:33 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,16 @@ t_list	*ft_lstlast(t_list *stash)
 }
 
 // Frees the full stash.
-void	ft_free_stash(t_list *stash)
+void	ft_free_stash(t_list *stash, char (*cleanbuf)[BUFFER_SIZE + 1])
 {
 	t_list	*next;
+	t_list	*new;
+	int		i;
+	char	*str;
 
+	str = *cleanbuf;
+	i = 0;
+	new = malloc(sizeof(t_list));
 	while (stash)
 	{
 		free(stash->content);
@@ -96,5 +102,12 @@ void	ft_free_stash(t_list *stash)
 		free(stash);
 		stash = next;
 	}
-	stash = NULL;
+	new->content = str;
+	/*while (i < (BUFFER_SIZE + 1))
+	{
+		new->content[i] = *cleanbuf[i];
+		i++;
+	}*/
+	stash = new;
+	//free(new);
 }
