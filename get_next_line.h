@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:04:37 by malord            #+#    #+#             */
-/*   Updated: 2022/05/26 11:27:41 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:17:43 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <sys/uio.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include <stdio.h> // Pour Printf seulement. Remove before submission.
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE

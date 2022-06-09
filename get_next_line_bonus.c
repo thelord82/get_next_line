@@ -6,150 +6,54 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/08 16:43:12 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:04:27 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-/* Calculates the number of chars in current line and allocates memory
-accordingly. */
-void	ft_genline(char **line, t_list *stash)
+long	ft_getline(char **cleanbuf, int fd)
 {
-	int	i;
-	int	len;
+	long	reader;
+	char	*buf;
 
-	len = 0;
-	while (stash)
+	while (!(*cleanbuf) || !ft_strlen_until(*cleanbuf, '\n'))
 	{
-		i = 0;
-		while (stash->content[i])
-		{
-			if (stash->content[i] == '\n')
-			{
-				len++;
-				break ;
-			}
-			len++;
-			i++;
-		}
-		stash = stash->next;
+		buf = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+		reader = read(fd, buf, BUFFER_SIZE);
+		if (reader <= 0)
+			return ((int)ft_free(buf));
+		*cleanbuf = ft_strjoin_free(*cleanbuf, buf);
+		free(buf);
 	}
-	*line = malloc(sizeof(char) * (len + 1));
+	return (ft_strlen_until(*cleanbuf, '\n'));
 }
 
-/* Extracts all characters from stash and stores in out line. Stops after /n. */
-void	ft_getline(t_list *stash, char **line)
-{
-	int	i;
-	int	j;
-
-	if (stash == NULL)
-		return ;
-	ft_genline(line, stash);
-	if (!(*line))
-		return ;
-	j = 0;
-	while (stash)
-	{
-		i = 0;
-		while (stash->content[i])
-		{
-			if (stash->content[i] == '\n')
-			{
-				(*line)[j++] = stash->content[i];
-				break ;
-			}
-			(*line)[j++] = stash->content[i++];
-		}
-		stash = stash->next;
-	}
-	(*line)[j] = '\0';
-}
-
-/* Cleans the stash after getting the line. Removes characters already returned 
-by get_next_line and keeps the unreturned ones in static variable. */
-void	ft_clean_stash(t_list **stash, char (*bufleft)[BUFFER_SIZE + 1])
-{
-	t_list	*last;
-	int		i;
-	int		j;
-
-	if (!stash)
-		return ;
-	last = ft_lstlast(*stash);
-	i = 0;
-	while (last->content[i] && last->content[i] != '\n')
-		i++;
-	if (last->content[i] == '\n')
-		i++;
-	j = 0;
-	while (last->content[i])
-	{
-		(*bufleft)[j++] = last->content[i];
-		i++;
-	}
-	(*bufleft)[j] = '\0';
-}
-
-// Adds the content of buffer to the end of stash.
-void	ft_add_to_stash(t_list **stash, char *buf, int reader)
-{
-	int		i;
-	t_list	*last;
-	t_list	*new;
-
-	new = malloc(sizeof(t_list));
-	if (!new)
-		return ;
-	new->next = NULL;
-	new->content = malloc(sizeof(char) * (reader + 1));
-	if (!new->content)
-		return ;
-	i = 0;
-	while (buf[i] && i < reader)
-	{
-		new->content[i] = buf[i];
-		i++;
-	}
-	new->content[i] = '\0';
-	if (*stash == NULL)
-	{
-		*stash = new;
-		return ;
-	}
-	last = ft_lstlast(*stash);
-	last->next = new;
-}
-
-/* Returns the next line of a file. Successive calls gets the next line
-until EOF*/
 char	*get_next_line(int fd)
 {
-	t_list			*stash;
-	char			*line;
-	int				reader;
-	static char		cleanbuf[OPEN_MAX][BUFFER_SIZE + 1];
-	char			*tmp;
+	char		*line;
+	long		len;
+	static char	*cleanbuf[OPEN_MAX];
 
-	stash = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &tmp, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (NULL);
-	reader = 1;
-	tmp = NULL;
-	ft_read_stash(fd, &stash, &reader);
-	if (stash == NULL)
-		return (NULL);
-	ft_getline(stash, &tmp);
-	line = ft_strjoin(cleanbuf[fd], tmp);
-	ft_clean_stash(&stash, &cleanbuf[fd]);
-	ft_free_stash(stash, &cleanbuf[fd]);
-	if (tmp[0] == '\0')
+	len = ft_getline(&(cleanbuf[fd]), fd);
+	if (!len)
+		len = ft_strlen_until(cleanbuf[fd], 0);
+	if (!len)
 	{
-		ft_free_stash(stash, &cleanbuf[fd]);
-		//free(line);
+		cleanbuf[fd] = ft_free(cleanbuf[fd]);
 		return (NULL);
 	}
-	free(tmp);
+	line = ft_calloc(sizeof(char), len + 1);
+	ft_strncpy(line, cleanbuf[fd], len);
+	if (!ft_strlen_until(cleanbuf[fd], '\n'))
+	{
+		cleanbuf[fd] = ft_free(cleanbuf[fd]);
+		cleanbuf[fd] = NULL;
+	}
+	else
+		ft_strncpy(cleanbuf[fd], &cleanbuf[fd][len],
+			ft_strlen_until(cleanbuf[fd], 0) - len + 1);
 	return (line);
 }
