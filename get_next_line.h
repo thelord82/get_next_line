@@ -6,7 +6,7 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:04:37 by malord            #+#    #+#             */
-/*   Updated: 2022/06/09 16:17:43 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/10 09:03:38 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_list
 
 char	*get_next_line(int fd);
 int		ft_found_newline(t_list *stash);
-size_t	ft_strlen(const char *s);
 t_list	*ft_lstlast(t_list *stash);
 void	ft_add_to_stash(t_list **stash, char *buf, int readed);
 t_list	*ft_clean_stash(t_list **stash);

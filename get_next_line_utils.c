@@ -6,12 +6,13 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/06/01 16:52:00 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:30:02 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// Allocates the memory, filled with /0 for safety
 void	*ft_calloc(size_t count, size_t size)
 {
 	size_t	i;

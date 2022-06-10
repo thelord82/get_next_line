@@ -6,12 +6,13 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 09:03:48 by malord            #+#    #+#             */
-/*   Updated: 2022/06/09 16:04:27 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:46:37 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
+// Allocates the memory and fills buffer, returns length of line including /n
 long	ft_getline(char **cleanbuf, int fd)
 {
 	long	reader;
@@ -29,6 +30,8 @@ long	ft_getline(char **cleanbuf, int fd)
 	return (ft_strlen_until(*cleanbuf, '\n'));
 }
 
+/* Returns the next line of a file. Successive calls gets the next line
+until EOF*/
 char	*get_next_line(int fd)
 {
 	char		*line;

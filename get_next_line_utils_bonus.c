@@ -6,12 +6,13 @@
 /*   By: malord <malord@student.42quebec.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 11:19:27 by malord            #+#    #+#             */
-/*   Updated: 2022/06/09 16:07:53 by malord           ###   ########.fr       */
+/*   Updated: 2022/06/09 16:37:27 by malord           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
+// Allocates the memory, filled with /0 for safety
 void	*ft_calloc(size_t count, size_t size)
 {
 	size_t	i;
@@ -31,6 +32,7 @@ void	*ft_calloc(size_t count, size_t size)
 	return (s);
 }
 
+// Frees !!!! Also save lines...
 char	*ft_free(void *ptr)
 {
 	if (ptr)
@@ -41,6 +43,7 @@ char	*ft_free(void *ptr)
 	return (NULL);
 }
 
+// Copy src string into dest string, while n bytes
 char	*ft_strncpy(char *dest, char *src, size_t n)
 {
 	size_t	i;
@@ -57,6 +60,7 @@ char	*ft_strncpy(char *dest, char *src, size_t n)
 	return (dest);
 }
 
+// Returns the length of a string until it hits the c character
 size_t	ft_strlen_until(char *s, char c)
 {
 	size_t	i;
@@ -74,6 +78,7 @@ size_t	ft_strlen_until(char *s, char c)
 		return (i + 1);
 }
 
+// Joins 2 strings together and frees the first one
 char	*ft_strjoin_free(char *s1, char const *s2)
 {
 	size_t	tlen;
